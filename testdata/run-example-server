@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+EXE=${BASH_SOURCE[0]}
+CTR=0
+while [[ -L $EXE ]]; do
+  (( ++CTR <= 100 )) || { echo Too many level of symlinks; exit 1; }
+  DIR=$( cd -P "$( dirname "$EXE" )" && pwd )
+  EXE=$( readlink "$EXE" )
+  [[ $EXE = /* ]] || EXE=$DIR/$EXE
+done
+__DIR__=$( cd -P "$( dirname "$EXE" )" && pwd )
+__NAME__=$( basename "$EXE" )
+__FILE__=$__DIR__/$__NAME__
+cd "$__DIR__"
+
+if [[ ! -e mbedtls/programs/ssl/ssl_server2 ]]; then
+        echo >&2 'Error: Cannot find mbedtls/programs/ssl/ssl_server2'
+        echo >&2 'Did you run `make` to compile the C project first?'
+        exit 1
+fi
+
+exec mbedtls/programs/ssl/ssl_server2 \
+        debug_level=5 \
+        server_addr=127.0.0.1 \
+        server_port=4430 \
+        crt_file=self-signed-certs/localhost.crtchain \
+        key_file=self-signed-certs/localhost.key \
+        extended_ms=0 \
+        tickets=0 \
+        force_version=tls1_2 \
+        force_ciphersuite=TLS-RSA-WITH-AES-128-CBC-SHA
