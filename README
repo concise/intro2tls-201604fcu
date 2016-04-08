@@ -1,0 +1,11 @@
+Compile the C project in the "mbedtls" directory
+
+        make
+
+Run the example HTTPS server at https://localhost:4430/
+
+        ./run-example-server
+
+Run the example HTTPS client
+
+        ./run-example-client

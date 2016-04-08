@@ -155,7 +155,7 @@ int main( void )
  * You will need to adapt the mbedtls_ssl_get_bytes_avail() test in ssl-opt.sh
  * if you change this value to something outside the range <= 100 or > 500
  */
-#define IO_BUF_LEN      200
+#define IO_BUF_LEN      512
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
 #if defined(MBEDTLS_FS_IO)
@@ -2190,8 +2190,32 @@ data_exchange:
     mbedtls_printf( "  > Write to client:" );
     fflush( stdout );
 
-    len = sprintf( (char *) buf, HTTP_RESPONSE,
-                   mbedtls_ssl_get_ciphersuite( &ssl ) );
+    if (0 == memcmp(buf, "GET / ", 6)) {
+        len = sprintf((char *) buf,
+                "HTTP/1.0 200 OK\r\n"
+                "Content-Type: text/html\r\n"
+                "\r\n"
+                "<!doctype html>\r\n"
+                "<meta charset=utf-8>\r\n"
+                "<title>Example</title>\r\n"
+                "<link rel=icon href='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>\r\n"
+                "<h1>Example HTTPS Server (HTTP 1.0 over TLS 1.2)</h1>\r\n"
+                "<p>Hello, world!</p>\r\n"
+                "<p>The TLS cipher suite we negotiated is: \"%s\".</p>\r\n",
+                mbedtls_ssl_get_ciphersuite(&ssl)
+                );
+    } else {
+        len = sprintf((char *) buf,
+                "HTTP/1.0 404 Not Found\r\n"
+                "Content-Type: text/html\r\n"
+                "\r\n"
+                "<!doctype html>\r\n"
+                "<meta charset=utf-8>\r\n"
+                "<title>Example</title>\r\n"
+                "<link rel=icon href='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>\r\n"
+                "<p>404 Not Found</p>\r\n"
+                );
+    }
 
     if( opt.transport == MBEDTLS_SSL_TRANSPORT_STREAM )
     {
