@@ -14,7 +14,14 @@ __NAME__=$( basename "$EXE" )
 __FILE__=$__DIR__/$__NAME__
 cd "$__DIR__"
 
+if [[ ! -e mbedtls/programs/ssl/ssl_server2 ]]; then
+        echo >&2 'Error: Cannot find mbedtls/programs/ssl/ssl_server2'
+        echo >&2 'Did you run `make` to compile the C project first?'
+        exit 1
+fi
+
 exec mbedtls/programs/ssl/ssl_server2 \
+        debug_level=5 \
         server_addr=127.0.0.1 \
         server_port=4430 \
         crt_file=self-signed-certs/localhost.crtchain \
