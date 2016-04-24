@@ -26,6 +26,7 @@ exec mbedtls/programs/ssl/ssl_server2 \
         server_port=4430 \
         crt_file=self-signed-certs/localhost.crtchain \
         key_file=self-signed-certs/localhost.key \
+        extended_ms=0 \
         tickets=0 \
         force_version=tls1_2 \
         force_ciphersuite=TLS-RSA-WITH-AES-128-CBC-SHA
