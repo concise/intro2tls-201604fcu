@@ -1,0 +1,10 @@
+HTTP/1.0 200 OK
+Content-Type: text/html
+
+<!doctype html>
+<meta charset=utf-8>
+<title>Example</title>
+<link rel=icon href='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'>
+<h1>Example HTTPS Server (HTTP 1.0 over TLS 1.2)</h1>
+<p>Hello, world!</p>
+<p>The TLS cipher suite we negotiated is: "TLS-RSA-WITH-AES-128-CBC-SHA".</p>
