@@ -1,0 +1,213 @@
+Asymmetric (Public-Key) Encryption Scheme
+-----------------------------------------
+
+                        public key
+                            |
+                            v
+                    .---------------.
+                    |               |
+      plaintext --> |  RSA encrypt  | --> ciphertext
+                    |               |
+                    '---------------'
+
+
+                       private key
+                            |
+                            v
+                    .---------------.
+                    |               |
+     ciphertext --> |  RSA decrypt  | --> plaintext
+                    |               |
+                    '---------------'
+
+
+
+Symmetric Encryption Scheme
+---------------------------
+
+                    shared secret key
+                            |
+                            v
+                    .---------------.
+                    |               |
+      plaintext --> |  AES-128-CBC  | --> ciphertext
+                    |    encrypt    |
+                    |               |
+                    '---------------'
+                            ^
+                            |
+                initialization vector (IV)
+
+
+                    shared secret key
+                            |
+                            v
+                    .---------------.
+                    |               |
+     ciphertext --> |  AES-128-CBC  | --> plaintext
+                    |    decrypt    |
+                    |               |
+                    '---------------'
+                            ^
+                            |
+                initialization vector (IV)
+
+
+
+Development Environment Setup
+-----------------------------
+
+    用 VirtualBox 虛擬機安裝 Ubuntu 14.04
+
+        https://www.virtualbox.org/wiki/Downloads
+        http://releases.ubuntu.com/trusty/
+
+    在 Ubuntu 14.04 從原始碼編譯、安裝 Python 3.5
+
+        sudo apt-get update
+        sudo apt-get install -y make libreadline-dev libssl-dev
+        wget -P /tmp https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+        tar xJf /tmp/Python-3.5.1.tar.xz -C /tmp
+        cd /tmp/Python-3.5.1
+        ./configure
+        make
+        sudo make install
+        sudo pip3 install --upgrade pip setuptools
+
+    在 OS X 用 Homebrew 安裝最新版的 Python 3 (Homebrew => http://brew.sh/)
+
+        brew install python3
+
+    檢查是否有 python3 與 openssl 指令
+
+        python3 --version
+        openssl version
+
+
+
+Python 3 Quick Overview
+-----------------------
+
+    # The official Python document (as a reference)
+    # https://docs.python.org/3/library/functions.html
+    # https://docs.python.org/3/library/stdtypes.html
+
+    # names (variables)
+    
+    # functions
+
+    # take care of the source code indentation
+
+    # data types: int, bytes, str, tuple, list, sequence, function
+
+    # almost everything in Python is an object
+
+    # difference between '==' and 'is'
+    a = [1, 2]
+    b = [1, 2]
+    assert a == b
+    assert not (a is b)
+
+    # Python list comprehension
+    [i     for i in range(10)]
+    [i * 2 for i in range(10)]
+
+    # Python for-loop lets you loop through a sequence
+    for i in range(10):
+        print(i)
+
+    # Sequence slicing works on tuple, list, str, bytes, ...
+    a = 'World'
+    assert a[2:] == 'rld'
+    assert a[:4] == 'Worl'
+    assert a[:-1] == 'Worl'
+    assert a[2:-1] == 'rl'
+
+    # Exception handling
+    def do_something():
+        assert False
+    try:
+        do_something()
+    except AssertionError:
+        pass
+
+    # Python module import
+    import module_name
+
+    # Read or write files
+    f1 = open('/path/to/file', 'rb')
+    file_content = f1.read()
+    f1.close()
+    f2 = open('/path/to/file', 'wb')
+    f2.write(b'Hello world')
+    f2.close()
+
+
+
+Read the RFC 5246 for TLS
+-------------------------
+
+    主文件 https://tools.ietf.org/html/rfc5246
+
+    勘誤表 https://www.rfc-editor.org/errata_search.php?rfc=5246
+
+    本次作業主要會用到的一些章節：
+
+        Section 4 ------------- 定義本文件中表示資料結構的語法
+        Section 5 ------------- 定義握手用的 PRF 函式 (Pseudorandom Function)
+        Section 6.2.1 --------- 定義 TLS 明文 record 格式
+        Section 6.2.1 --------- 定義 TLS 明文 record 格式
+        Section 6.2.3 --------- 定義 TLS 密文 record 格式
+        Section 6.2.3.2 ------- 定義 TLS 密文 record 中 block-ciphered 欄位格式
+        Section 6.3 ----------- 如何從 master_secret 導出加解密用的 key
+        Section 7.4 ----------- 定義 TLS 握手訊息格式
+        Section 7.4.1.2 ------- 定義 TLS 握手的 ClientHello 訊息
+        Section 7.4.1.3 ------- 定義 TLS 握手的 ServerHello 訊息
+        Section 7.4.7.1 ------- 定義 TLS 握手的 ClientKeyExchange 訊息
+        Section 8.1 ----------- 如何從 pre_master_secret 導出 master_secret
+
+
+
+What you should do
+------------------
+
+    1.  打開兩個 TLS 封包檔案，從 TLS record layer 開始拆解
+
+    2.  從這些 records 取出 ContentType 為 22 == 0x16 的 Handshake 訊息
+
+    3.  從 ClientHello 訊息擷取出 32 bytes 的 client_random
+
+    4.  從 ServerHello 訊息擷取出 32 bytes 的 server_random
+
+    5.  從 ClientKeyExchange 訊息擷取出 encrypted_pre_master_secret
+
+    6.  利用 RSA private key 解密，算出 48 bytes 的 pre_master_secret
+
+    7.  利用 TLS PRF 函式，從 pre_master_secret 算出 48 bytes 的 master_secret
+
+    8.  利用 TLS PRF 函式，從 master_secret 算出 master_secret
+
+        (1) 20 bytes 的 client_write_MAC_key (可無視，它的功能是計算 HMAC-SHA1)
+        (2) 20 bytes 的 server_write_MAC_key (可無視，它的功能是計算 HMAC-SHA1)
+        (3) 16 bytes 的 client_write_key (它的功能是 AES-128-CBC 加解密)
+        (4) 16 bytes 的 server_write_key (它的功能是 AES-128-CBC 加解密)
+
+    9.  從封包檔案包含的那些 records 取出 ContentType 為 23 == 0x17 的
+        ApplicationData 訊息，它們目前是 AES-128-CBC 加密的狀態
+
+    10. 將這些 ApplicationData 訊息利用 client_write_key 和 server_write_key
+        以 AES-128-CBC 解密。
+
+    11. 根據 Section 6.2.3.2 的格式，將解密後的資料格式應該會長這樣：
+
+            struct {
+                opaque content[TLSCompressed.length];
+                opaque MAC[SecurityParameters.mac_length];
+                uint8 padding[GenericBlockCipher.padding_length];
+                uint8 padding_length;
+            };
+
+        根據規範，將 padding_length 、 padding 、 MAC 去除，剩下的就是
+        明文的 HTTP request/response 訊息了。
+
+    12. 將明文的 HTTP request/response 訊息分別寫入輸出檔案。
