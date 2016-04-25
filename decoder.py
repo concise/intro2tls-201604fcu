@@ -44,7 +44,8 @@ def AES128CBC_DECRYPT(secret_key, ini_vector, ciphertext):
     assert type(ciphertext) is bytes and len(ciphertext) % 16 == 0
     stdout, stderr, retcode = SYSTEM((
         'openssl', 'enc', '-aes-128-cbc', '-d', '-nopad',
-        '-K', secret_key.hex(), '-iv', ini_vector.hex()
+        '-K', ''.join('%02x'%x for x in secret_key),
+        '-iv', ''.join('%02x'%x for x in ini_vector)
     ), ciphertext)
     assert retcode == 0 and stderr == b''
     return stdout
