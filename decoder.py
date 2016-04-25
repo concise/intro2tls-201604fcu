@@ -14,7 +14,8 @@ def HMAC_SHA256(key, msg):
 def SYSTEM(command, stdin=None):
     from subprocess import Popen, PIPE
     proc = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    return (*proc.communicate(stdin), proc.returncode)
+    stdout, stderr = proc.communicate(stdin)
+    return stdout, stderr, proc.returncode
 
 def RSA_DECRYPT(skfilename, ciphertext):
     assert type(skfilename) is str
