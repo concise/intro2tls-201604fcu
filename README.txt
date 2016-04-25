@@ -1,3 +1,5 @@
+sudo apt-get install build-essential git tcpflow
+
 git clone https://github.com/concise/intro2tls-201604fcu.git
 
 cd intro-to-tls-april-2016
