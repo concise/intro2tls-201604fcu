@@ -8,7 +8,15 @@ make
 
 ./run-example-server
 
+#
+# open another shell
+#
+
 sudo tcpdump -i lo -w /tmp/captured-packets.pcap host 127.0.0.1 and port 4430
+
+#
+# open another shell
+#
 
 ./run-example-client
 #
@@ -17,6 +25,10 @@ sudo tcpdump -i lo -w /tmp/captured-packets.pcap host 127.0.0.1 and port 4430
 #   1. open new Firefox
 #   2. import self-signed-certs/rootca.crt
 #   3. navigate to https://localhost:4430/
+#
+
+#
+# Now, stop tcpdump and run-example-server process by sending CTRL-C to them
 #
 
 mkdir /tmp/tcp-flows
