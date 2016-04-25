@@ -1,4 +1,6 @@
-git clone https://github.com/concise/intro-to-tls-april-2016.git
+git clone https://github.com/concise/intro2tls-201604fcu.git
+
+git checkout testdata
 
 cd intro-to-tls-april-2016
 
