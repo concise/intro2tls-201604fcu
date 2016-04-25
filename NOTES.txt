@@ -1,3 +1,10 @@
+How the test data are generated
+-------------------------------
+
+        Check out the git "testdata" branch (not the "master" branch)
+
+
+
 Asymmetric (Public-Key) Encryption Scheme
 -----------------------------------------
 
