@@ -1,0 +1,24 @@
+git clone https://github.com/concise/intro-to-tls-april-2016.git
+
+cd intro-to-tls-april-2016
+
+make
+
+./run-example-server
+
+sudo tcpdump -i lo -w /tmp/captured-packets.pcap host 127.0.0.1 and port 4430
+
+./run-example-client
+#
+# or:
+#
+#   1. open new Firefox
+#   2. import self-signed-certs/rootca.crt
+#   3. navigate to https://localhost:4430/
+#
+
+mkdir /tmp/tcp-flows
+
+cd /tmp/tcp-flows
+
+tcpflow -r /tmp/captured-packets.pcap
