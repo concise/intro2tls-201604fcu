@@ -1,6 +1,8 @@
 參考資料
 
     第一週用的投影片 https://goo.gl/7AZpoz
+    第二週螢幕錄影一 https://www.youtube.com/watch?v=4UOk38ni0Lc
+    第二週螢幕錄影二 https://www.youtube.com/watch?v=o6YKZa3UdIw
     TLS 1.2 標準文件 https://tools.ietf.org/html/rfc5246
     SSL/TLS 維基百科 https://en.wikipedia.org/wiki/Transport_Layer_Security
     Python3 語言文件 https://docs.python.org/3/
