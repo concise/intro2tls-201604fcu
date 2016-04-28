@@ -100,7 +100,7 @@ Python 3 Quick Overview
     # https://docs.python.org/3/library/stdtypes.html
 
     # names (variables)
-    
+
     # functions
 
     # take care of the source code indentation
@@ -162,7 +162,6 @@ Read the RFC 5246 for TLS
 
         Section 4 ------------- 定義本文件中表示資料結構的語法
         Section 5 ------------- 定義握手用的 PRF 函式 (Pseudorandom Function)
-        Section 6.2.1 --------- 定義 TLS 明文 record 格式
         Section 6.2.1 --------- 定義 TLS 明文 record 格式
         Section 6.2.3 --------- 定義 TLS 密文 record 格式
         Section 6.2.3.2 ------- 定義 TLS 密文 record 中 block-ciphered 欄位格式

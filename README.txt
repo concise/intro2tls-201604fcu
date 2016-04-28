@@ -54,21 +54,19 @@
     本作業的評分將會採用和它們類似的測資進行。
 
 
-參考程式
+參考程式 decoder.py 有三個函式可能對你有幫助：
 
-    參考程式 decoder.py 有三個函式可能對你有幫助：
+    TLS_PRF
 
-        TLS_PRF
+        實作了 TLS 的 pseudorandom function (RFC 5246 Section 5)
 
-            實作了 TLS 的 pseudorandom function (RFC 5246 Section 5)
+    RSA_DECRYPT
 
-        RSA_DECRYPT
+        實作了 RSA 解密
 
-            實作了 RSA 解密
+    AES128CBC_DECRYPT
 
-        AES128CBC_DECRYPT
-            
-            實作了 AES-128 的 CBC mode 解密
+        實作了 AES-128 的 CBC mode 解密
 
 
 注意事項
