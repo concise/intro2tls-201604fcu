@@ -54,6 +54,12 @@
     本作業的評分將會採用和它們類似的測資進行。
 
 
+    2016/05/15 追註：
+
+    新增一組測試資料 test5 該測資的 HTTP request 或 HTTP response 大小
+    超過 16 KiB 因此 ApplicationData 必然會橫跨數個 records，請注意這種情況。
+
+
 參考程式 decoder.py 有三個函式可能對你有幫助：
 
     TLS_PRF

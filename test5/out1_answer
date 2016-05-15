@@ -1,0 +1,5 @@
+GET /nginx-logo.png HTTP/1.0
+Host: localhost
+User-Agent: curl/7.47.0
+Accept: */*
+
